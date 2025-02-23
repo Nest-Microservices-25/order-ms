@@ -14,7 +14,8 @@ async function bootstrap() {
         port: envs.port,
       },
     },
-  );  app.useGlobalPipes(
+  );
+  app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
@@ -25,8 +26,10 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen();
 
-  logger.log(`Server is running on ${envs.port}`);
+  logger.log(`\n🚀 ORDERS MICROSERVICE running at:`);
+  logger.log(`📜  API Docs: \x1b[36mhttp://localhost:${envs.port}/api\x1b[0m`);
+  logger.log(`🔗  API URL: \x1b[32mhttp://localhost:${envs.port}\x1b[0m\n`);
 }
 bootstrap();
