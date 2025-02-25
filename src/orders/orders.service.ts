@@ -4,6 +4,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
 import { RpcException } from '@nestjs/microservices';
+import { OrderPaginationDto } from './dto';
 
 @Injectable()
 export class OrdersService extends PrismaClient implements OnModuleInit {
@@ -18,13 +19,20 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
     });
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: OrderPaginationDto) {
     const { page, limit } = paginationDto;
-    const totalPages = await this.order.count();
+    const totalPages = await this.order.count({
+      where: {
+        status: paginationDto.status,
+      },
+    });
     const lastPage = Math.ceil(totalPages / limit);
     const data = await this.order.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: {
+        status: paginationDto.status,
+      },
     });
     return {
       data,

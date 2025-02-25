@@ -4,6 +4,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PaginationDto } from 'src/common';
+import { OrderPaginationDto } from './dto';
 
 @Controller()
 export class OrdersController {
@@ -15,9 +16,9 @@ export class OrdersController {
   }
 
   @MessagePattern({ cmd: 'get-orders' })
-  findAll(@Payload() paginationDto: PaginationDto) {
-    console.log('🚀 ~ findAll ~ paginationDto:', paginationDto);
-    return this.ordersService.findAll(paginationDto);
+  findAll(@Payload() orderPaginationDto: OrderPaginationDto) {
+    console.log('🚀 ~ findAll ~ paginationDto:', orderPaginationDto);
+    return this.ordersService.findAll(orderPaginationDto);
   }
 
   @MessagePattern({ cmd: 'get-order-by-id' })
