@@ -1,3 +1,4 @@
+import { ChangeOrderStatusDto } from './dto/change-order-status.dto';
 import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -61,9 +62,18 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  // update(id: number, updateOrderDto: UpdateOrderDto) {
-  //   return `This action updates a #${id} order`;
-  // }
+  async changeStatus(changeOrderStatusDto: ChangeOrderStatusDto) {
+    const { id, status } = changeOrderStatusDto;
+    const order = await this.findOne(id);
+    return this.order.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} order`;

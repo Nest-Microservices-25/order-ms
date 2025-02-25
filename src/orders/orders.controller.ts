@@ -4,7 +4,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PaginationDto } from 'src/common';
-import { OrderPaginationDto } from './dto';
+import { ChangeOrderStatusDto, OrderPaginationDto } from './dto';
 
 @Controller()
 export class OrdersController {
@@ -29,11 +29,10 @@ export class OrdersController {
   updateStatus(@Payload() updateOrderDto: UpdateOrderDto) {
     // return this.ordersService.update(updateOrderDto.id, updateOrderDto);
   }
-  // @MessagePattern({cmd:'updateOrder'})
-  // update(@Payload() updateOrderDto: UpdateOrderDto) {
-  //   return this.ordersService.update(updateOrderDto.id, updateOrderDto);
-  // }
-
+  @MessagePattern({ cmd: 'update-status' })
+  changeOrderStatus(@Payload() updateOrderDto: ChangeOrderStatusDto) {
+    return this.ordersService.changeStatus(updateOrderDto);
+  }
   // @MessagePattern({cmd:'removeOrder'})
   // remove(@Payload() id: number) {
   //   return this.ordersService.remove(id);
