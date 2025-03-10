@@ -23,6 +23,7 @@ export class OrdersController {
 
   @MessagePattern({ cmd: 'get-order-by-id' })
   findOne(@Payload('id', ParseUUIDPipe) id: string) {
+    console.log('🚀 ~ findOne ~ id:', id);
     return this.ordersService.findOne(id);
   }
   @MessagePattern({ cmd: 'changeOrderStatus' })

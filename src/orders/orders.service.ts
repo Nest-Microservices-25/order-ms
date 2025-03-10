@@ -118,9 +118,29 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
       where: {
         id,
       },
+      include: {
+        OrderItem: {
+          select: {
+            price: true,
+            quantity: true,
+            productId: true,
+          },
+        },
+      },
     });
     if (order) {
-      return order;
+      const productsIds = order.OrderItem.map((item) => item.productId);
+      const products = await firstValueFrom(
+        this.productsClient.send({ cmd: 'validate-products' }, productsIds),
+      );
+
+      return {
+        ...order,
+        OrderItem: order.OrderItem.map((item) => ({
+          ...item,
+          name: products.find((x) => x.id === item.productId).name,
+        })),
+      };
     } else {
       throw new RpcException({
         status: HttpStatus.BAD_REQUEST,
